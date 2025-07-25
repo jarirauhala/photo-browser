@@ -18,7 +18,7 @@ const PhotoList = () => {
         {photos.map((photo) => (
           <Link
             key={photo.id}
-            to={`/photos/${photo.id}`}
+            to={`photos/${photo.id}`}
             className="hover:scale-105 transition-transform"
           >
             <img
