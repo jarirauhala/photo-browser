@@ -7,7 +7,7 @@ const PhotoList = () => {
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/photos?_limit=20")
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((data) => setPhotos(data));
   }, []);
 
