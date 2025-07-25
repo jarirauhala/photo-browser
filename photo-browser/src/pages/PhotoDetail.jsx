@@ -16,7 +16,7 @@ const PhotoDetail = () => {
 
   return (
     <div className="p-6">
-      <Link to="/" className="text-blue-500 underline">&larr; Back to list</Link>
+      <Link to="/" className="text-red-500 underline">&larr; Back to list</Link>
       <div className="mt-4">
         <img
           src={`https://picsum.photos/id/${photo.id}/600/400`}
