@@ -6,8 +6,8 @@ function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/photo-browser" element={<PhotoList />} />
-      <Route path="/photo-browser/photos/:id" element={<PhotoDetail />} />
+        <Route path="/photo-browser" element={<PhotoList />} />
+        <Route path="/photo-browser/photos/:id" element={<PhotoDetail />} />
       </Routes>
     </Router>
   );
