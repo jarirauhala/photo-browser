@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
+import Pagination from "../components/Pagination";
 
 const PHOTOS_PER_PAGE = 20;
 
@@ -70,6 +71,12 @@ const PhotoList = () => {
                                 </Link>
                             ))}
                         </div>
+
+                        <Pagination
+                            currentPage={page}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                        />
                     </>
                 )}
             </div>    
