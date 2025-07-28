@@ -1,34 +1,81 @@
-// src/pages/PhotoDetail.jsx
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Button } from "../components/Button";
 
-const PhotoDetail = () => {
-  const { id } = useParams();
-  const [photo, setPhoto] = useState(null);
+export default function PhotoDetail() {
+    const { id } = useParams();
+    const photoId = parseInt(id);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [photo, setPhoto] = useState(null);
 
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/photos/${id}`)
-      .then((response) => response.json())
-      .then((data) => setPhoto(data));
-  }, [id]);
+    useEffect(() => {
+        fetch(`https://jsonplaceholder.typicode.com/photos/${photoId}`)
+            .then((response) => response.json())
+            .then(setPhoto);
+    }, [photoId]);
 
-  if (!photo) return <div className="p-6">Loading...</div>;
+    const handleBackToList = () => {
+        const from = location.state?.from || "/";
+        navigate(from);
+    };
 
-  return (
-    <div className="p-6">
-      <Link to="/photo-browser" className="text-blue-500 underline">&larr; Back to list</Link>
-      <div className="mt-4">
-        <img
-          src={`https://picsum.photos/id/${photo.id}/600/400`}
-          alt={photo.title}
-          className="rounded shadow mb-4"
-        />
-        <h2 className="text-xl font-semibold">{photo.title}</h2>
-        <p className="text-gray-600">Album ID: {photo.albumId}</p>
-        <p className="text-gray-600">Photo ID: {photo.id}</p>
-      </div>
-    </div>
-  );
-};
+    const goToNext = () => {
+        if (photoId < 5000) {
+            setPhoto(null);
+            navigate(`/photo-browser/photos/${photoId + 1}`, { state: location.state });
+        }
+    };
 
-export default PhotoDetail;
+    const goToPrev = () => {
+        if (photoId > 1) {
+            setPhoto(null);
+            navigate(`/photo-browser/photos/${photoId - 1}`, { state: location.state });
+        }
+    };
+
+    if (!photo) return <div className="text-center p-8">Loading...</div>;
+
+    return (
+        <div className="max-w-7xl mx-auto p-6 pt-16 pb-16">
+            {/* Back To List Button */}
+            <div className="mb-6">
+                <button
+                    onClick={handleBackToList}
+                    className="inline-flex items-center gap-2 text-blue-600 hover:underline text-base"
+                >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to list
+                </button>
+            </div>
+
+            {/* Image + Info */}
+            <div className="bg-white rounded-xl shadow p-6 grid gap-6 md:grid-cols-3 items-center">
+                <img
+                    src={`https://picsum.photos/id/${photo.id}/1200/800`}
+                    alt={photo.title}
+                    className="rounded-xl object-cover w-full h-auto shadow md:col-span-2"
+                />
+
+                <div className="md:col-span-1">
+                    <h2 className="text-2xl font-semibold mb-2">{photo.title}</h2>
+                    <p className="text-gray-500 text-sm mb-1">Album ID: {photo.albumId}</p>
+                    <p className="text-gray-400 text-sm">Photo ID: {photo.id}</p>
+                </div>
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="mt-6 flex justify-between">
+                <Button onClick={goToPrev} disabled={photoId === 1} variant="outline">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Previous
+                </Button>
+                <Button onClick={goToNext} disabled={photoId === 5000} variant="outline">
+                    Next
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+            </div>
+        </div>
+    );
+}
